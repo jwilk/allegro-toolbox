@@ -14,6 +14,12 @@ import urllib.parse
 
 import lxml.html
 
+def filter_query(query, *keys):
+    return [
+        (k, v) for (k, v) in query
+        if not k.startswith(keys)
+    ]
+
 def fix_url(url):
     tup = urllib.parse.urlsplit(url)
     netloc = tup.netloc
@@ -29,10 +35,7 @@ def fix_url(url):
     qdict = dict(query)
     if tup.path.startswith('/rd/'):
         return qdict['url']
-    query = [
-        (k, v) for (k, v) in query
-        if not k.startswith(('utm_', 'tr_'))
-    ]
+    query = filter_query(query, 'utm_', 'tr_')
     query = urllib.parse.urlencode(query)
     tup = tup._replace(netloc=qdict['tr_d'], query=query)
     return urllib.parse.urlunsplit(tup)

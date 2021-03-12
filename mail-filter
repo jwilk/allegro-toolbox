@@ -27,17 +27,19 @@ def fix_url(url):
         return ''
     if netloc.endswith('.allegrostatic.com'):
         return ''
-    if netloc != 't.allegro.pl':
-        return url
-    if tup.path.startswith('/tr/'):
-        return ''
     query = urllib.parse.parse_qsl(tup.query)
-    qdict = dict(query)
-    if tup.path.startswith('/rd/'):
-        return qdict['url']
-    query = filter_query(query, 'utm_', 'tr_')
+    if netloc == 't.allegro.pl':
+        if tup.path.startswith('/tr/'):
+            return ''
+        qdict = dict(query)
+        if tup.path.startswith('/rd/'):
+            return qdict['url']
+        query = filter_query(query, 'utm_', 'tr_')
+        netloc = qdict['tr_d']
+    else:
+        query = filter_query(query, 'utm_')
     query = urllib.parse.urlencode(query)
-    tup = tup._replace(netloc=qdict['tr_d'], query=query)
+    tup = tup._replace(netloc=netloc, query=query)
     return urllib.parse.urlunsplit(tup)
 
 def main():

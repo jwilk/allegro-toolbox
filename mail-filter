@@ -16,11 +16,12 @@ import lxml.html
 
 def fix_url(url):
     tup = urllib.parse.urlsplit(url)
-    if tup.netloc == 'a.allegroimg.com':
+    netloc = tup.netloc
+    if netloc == 'a.allegroimg.com':
         return ''
-    if tup.netloc.endswith('.allegrostatic.com'):
+    if netloc.endswith('.allegrostatic.com'):
         return ''
-    if tup.netloc != 't.allegro.pl':
+    if netloc != 't.allegro.pl':
         return url
     if tup.path.startswith('/tr/'):
         return ''

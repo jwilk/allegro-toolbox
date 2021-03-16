@@ -43,9 +43,9 @@ def fix_url(url):
     return urllib.parse.urlunsplit(tup)
 
 def main():
-    msg = email.message_from_binary_file(sys.stdin.buffer, policy=email.policy.default)
-    ct = msg.get_content_type()
-    if ct == 'text/html':
+    whole_msg = email.message_from_binary_file(sys.stdin.buffer, policy=email.policy.default)
+    msg = whole_msg.get_body('html')
+    if msg is not None:
         charset = msg.get_content_charset()
         html = msg.get_payload(decode=True)
         html = html.decode(charset)
@@ -58,7 +58,7 @@ def main():
         content_length = len(msg.get_payload(decode=True)) - 1
         msg['Content-Length'] = str(content_length)
     generator = email.generator.BytesGenerator(sys.stdout.buffer, mangle_from_=False)
-    generator.flatten(msg, unixfrom=True)
+    generator.flatten(whole_msg, unixfrom=True)
 
 if __name__ == '__main__':
     main()

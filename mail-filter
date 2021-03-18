@@ -35,6 +35,10 @@ def fix_url(url):
         if tup.path.startswith('/rd/'):
             return qdict['url']
         query = filter_query(query, 'utm_', 'tr_')
+        query = [
+            (k, urllib.parse.unquote_plus(v))
+            for (k, v) in query
+        ]
         netloc = qdict['tr_d']
     else:
         query = filter_query(query, 'utm_')

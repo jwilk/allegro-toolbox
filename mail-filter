@@ -33,7 +33,7 @@ def fix_url(url):
             return ''
         qdict = dict(query)
         if tup.path.startswith('/rd/'):
-            return qdict['url']
+            return fix_url(qdict['url'])
         query = filter_query(query, 'utm_', 'tr_')
         query = [
             (k, urllib.parse.unquote_plus(v))

@@ -1,0 +1,40 @@
+name: CI
+on:
+  - push
+  - pull_request
+jobs:
+  main:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        include:
+        - python-version: '3.5'
+          os: ubuntu-18.04
+        python-version:
+        - '3.6'
+        - '3.7'
+        - '3.8'
+        - '3.9'
+        - '3.10-dev'
+        os: [ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{matrix.python-version}}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{matrix.python-version}}
+    - run: |
+        python3 -m pip install pydiatra
+    - run: |
+        python3 -m pydiatra .
+    - run: |
+        python3 -m pip install pyflakes
+    - run: |
+        python3 -m pyflakes .
+    - run: |
+        python3 -m pip install lxml
+    - name: smoke test
+      run: |
+        ./mail-filter < /dev/null
+
+# vim:ts=2 sts=2 sw=2 et

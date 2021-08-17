@@ -28,6 +28,7 @@ def fix_url(url):
     if netloc.endswith('.allegrostatic.com'):
         return ''
     query = urllib.parse.parse_qsl(tup.query)
+    fragment = tup.fragment
     if netloc == 't.allegro.pl':
         if tup.path.startswith('/tr/'):
             return ''
@@ -40,10 +41,11 @@ def fix_url(url):
             for (k, v) in query
         ]
         netloc = qdict['tr_d']
+        fragment = qdict.get('tr_f')
     else:
         query = filter_query(query, 'utm_')
     query = urllib.parse.urlencode(query)
-    tup = tup._replace(netloc=netloc, query=query)
+    tup = tup._replace(netloc=netloc, query=query, fragment=fragment)
     return urllib.parse.urlunsplit(tup)
 
 def main():

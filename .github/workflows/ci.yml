@@ -7,9 +7,6 @@ jobs:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        include:
-        - python-version: '3.5'
-          os: ubuntu-18.04
         python-version:
         - '3.6'
         - '3.7'

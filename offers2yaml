@@ -4,7 +4,8 @@
 # SPDX-License-Identifier: MIT
 
 '''
-convert offers page (copy&pasted from the browser)
+convert offers page
+(copy&pasted from <https://allegro.pl/moje-allegro/sprzedaz/moje-oferty>)
 to YAML
 '''
 

@@ -62,7 +62,7 @@ def main():
         n_visits = next(stdin)
         if n_visits != '-':
             n_visits = int(n_visits)
-            if n_visits > 1:
+            if n_visits > 0:
                 ns.n_visits = n_visits
         status = next(stdin)
         status = {

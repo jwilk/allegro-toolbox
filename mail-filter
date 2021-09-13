@@ -25,7 +25,7 @@ def fix_url(url):
     netloc = tup.netloc
     if netloc == 'a.allegroimg.com':
         return ''
-    if netloc.endswith('.allegrostatic.com'):
+    if netloc.endswith('.allegrostatic.com') and '/icons/' in tup.path:
         return ''
     query = urllib.parse.parse_qsl(tup.query)
     fragment = tup.fragment

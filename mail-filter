@@ -29,7 +29,7 @@ def fix_url(url):
         return ''
     query = urllib.parse.parse_qsl(tup.query)
     fragment = tup.fragment
-    if netloc == 't.allegro.pl':
+    if netloc in {'t.allegrolokalnie.pl', 't.allegro.pl'}:
         if tup.path.startswith('/tr/'):
             return ''
         qdict = dict(query)

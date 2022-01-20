@@ -51,7 +51,11 @@ def main():
         price = price.replace(',', '.')
         price = decimal.Decimal(price)
         ns.price = f'{price} PLN'
-        n_sold = next(stdin)
+        tmp = next(stdin)
+        if tmp == 'Przegląd cen':
+            n_sold = next(stdin)
+        else:
+            n_sold = tmp
         if n_sold != '-':
             ns.n_sold = int(n_sold)
         n_watching = next(stdin)

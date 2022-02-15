@@ -21,15 +21,16 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{matrix.python-version}}
-    - run: |
+    - name: run pydiatra
+      run: |
         python3 -m pip install pydiatra
-    - run: |
         python3 -m pydiatra -v .
-    - run: |
+    - name: run pyflakes
+      run: |
         python3 -m pip install pyflakes
-    - run: |
         python3 -m pyflakes .
-    - run: |
+    - name: install lxml
+      run: |
         python3 -m pip install lxml
     - name: smoke test
       run: |

@@ -5,7 +5,7 @@
 
 '''
 convert offers page
-(copy&pasted from <https://allegro.pl/moje-allegro/sprzedaz/moje-oferty>)
+(copy&pasted from <https://allegro.pl/moje-allegro/sprzedaz/obsluga-ofert/moj-asortyment>)
 to YAML
 '''
 
@@ -17,6 +17,10 @@ import yaml
 
 0_0  # Python >= 3.6 is required
 
+def chop_prefix(s, prefix, tp=str):
+    assert s.startswith(prefix), f'{s!r} does not start with {prefix!r}'
+    return tp(s[len(prefix):])
+
 def main():
     stdin = map(str.rstrip, sys.stdin)
     for line in stdin:
@@ -26,48 +30,35 @@ def main():
     while True:
         ns = types.SimpleNamespace()
         title = next(stdin)
-        tmp = next(stdin)
-        if title.isdigit() and tmp[0] == '1' and tmp[1] == '-':
+        ident = next(stdin)
+        if ident == '':
             break
-        if tmp.isdigit():
-            ident = tmp
-        else:
-            assert title == tmp
-            ident = next(stdin)
-        ns.ident = int(ident)
+        ns.ident = chop_prefix(ident, 'nr: ', int)
         ns.title = title
-        count = next(stdin)
-        if count == 'Produkt:':
-            count = next(stdin)
-        if count != '-':
-            count = int(count)
-            if count != 1:
-                ns.count = count
-        tmp = next(stdin)
-        assert tmp == ''
+        prod = next(stdin)
+        assert prod in {'Brak połączenia', 'Połączono z Katalogiem'}
         price = next(stdin)
         assert price.endswith(' zł')
         price = price[:-3]
         price = price.replace(',', '.')
         price = decimal.Decimal(price)
         ns.price = f'{price} PLN'
-        tmp = next(stdin)
-        if tmp == 'Przegląd cen':
-            n_sold = next(stdin)
-        else:
-            n_sold = tmp
-        if n_sold != '-':
-            ns.n_sold = int(n_sold)
-        n_watching = next(stdin)
-        if n_watching != '-':
-            n_watching = int(n_watching)
-            if n_watching > 0:
-                ns.n_watching = n_watching
+        count = next(stdin)
+        count = int(count)
+        if count != 1:
+            ns.count = count
         n_visits = next(stdin)
-        if n_visits != '-':
-            n_visits = int(n_visits)
-            if n_visits > 0:
-                ns.n_visits = n_visits
+        n_visits = chop_prefix(n_visits, 'wizyty: ', int)
+        n_sold = next(stdin)
+        n_sold = chop_prefix(n_sold, 'sprzedano: ', int)
+        n_watching = next(stdin)
+        n_watching = chop_prefix(n_watching, 'obserwują: ', int)
+        if n_sold > 0:
+            ns.n_sold = n_sold
+        if n_watching > 0:
+            ns.n_watching = n_watching
+        if n_visits > 0:
+            ns.n_visits = n_visits
         status = next(stdin)
         status = {
             'aktywna': 'active',
@@ -76,8 +67,6 @@ def main():
         }[status]
         if status != 'active':
             ns.status = status
-        tmp = next(stdin)
-        assert tmp == 'SZCZEGÓŁY'
         d = {
             k: v
             for k, v in vars(ns).items()

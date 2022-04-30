@@ -36,7 +36,7 @@ def main():
         ns.ident = chop_prefix(ident, 'nr: ', int)
         ns.title = title
         prod = next(stdin)
-        assert prod in {'Brak połączenia', 'Połączono z Katalogiem'}
+        assert prod in {'Brak połączenia', 'Brak wymogu połączenia', 'Połączono z Katalogiem'}
         price = next(stdin)
         assert price.endswith(' zł')
         price = price[:-3]

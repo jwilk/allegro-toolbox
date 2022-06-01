@@ -38,6 +38,8 @@ def main():
         prod = next(stdin)
         assert prod in {'Brak połączenia', 'Brak wymogu połączenia', 'Połączono z Katalogiem'}
         price = next(stdin)
+        if price == 'warning':
+            price = next(stdin)
         assert price.endswith(' zł')
         price = price[:-3]
         price = price.replace(',', '.')

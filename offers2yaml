@@ -36,6 +36,12 @@ def main():
         ns.ident = chop_prefix(ident, 'nr: ', int)
         ns.title = title
         prod = next(stdin)
+        if prod.startswith('ISBN: '):
+            ns.isbn = prod[6:]
+            prod = next(stdin)
+        elif prod.startswith('ISSN:'):
+            ns.issn = prod[6:]
+            prod = next(stdin)
         assert prod in {'Brak połączenia', 'Brak wymogu połączenia', 'Połączono z Katalogiem'}
         price = next(stdin)
         if price == 'warning':

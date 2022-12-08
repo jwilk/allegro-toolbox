@@ -24,7 +24,7 @@ def chop_prefix(s, prefix, tp=str):
 def main():
     stdin = map(str.rstrip, sys.stdin)
     for line in stdin:
-        if line == 'status':
+        if line.strip() == 'status':
             break
     lst = []
     while True:
@@ -42,9 +42,11 @@ def main():
         elif prod.startswith('ISSN:'):
             ns.issn = prod[6:]
             prod = next(stdin)
+        if prod.strip() == '':
+            prod = next(stdin)
         assert prod in {'Brak połączenia', 'Brak wymogu połączenia', 'Połączono z Katalogiem'}
         price = next(stdin)
-        if price == 'warning':
+        if price.strip() in {'', 'warning'}:
             price = next(stdin)
         assert price.endswith(' zł')
         price = price[:-3]
@@ -67,12 +69,13 @@ def main():
             ns.n_watching = n_watching
         if n_visits > 0:
             ns.n_visits = n_visits
+        assert next(stdin) == ''
         status = next(stdin)
         status = {
             'aktywna': 'active',
             'szkic': 'draft',
             'zakończona': 'closed',
-        }[status]
+        }[status.strip()]
         if status != 'active':
             ns.status = status
         d = {

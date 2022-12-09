@@ -46,7 +46,9 @@ def main():
             prod = next(stdin)
         assert prod in {'Brak połączenia', 'Brak wymogu połączenia', 'Połączono z Katalogiem'}
         price = next(stdin)
-        if price.strip() in {'', 'warning'}:
+        if price.strip() == 'warning':
+            price = next(stdin)
+        if price.strip() == '':
             price = next(stdin)
         assert price.endswith(' zł')
         price = price[:-3]

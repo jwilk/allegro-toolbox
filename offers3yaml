@@ -14,7 +14,7 @@ import sys
 
 import yaml
 
-0_0  # Python >= 3.6 is required
+async def _(): f'{await "# Python >= 3.7 is required #"}'
 
 class Dict(dict):
     __slots__ = ()

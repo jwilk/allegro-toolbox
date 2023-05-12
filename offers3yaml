@@ -9,6 +9,7 @@ https://edge.allegro.pl/sale/offers API)
 to YAML
 '''
 
+import datetime
 import json
 import sys
 
@@ -44,6 +45,17 @@ def main():
         yo.n_visits = offer.stats.visitsCount
         if yo.n_visits == 0:
             del yo.n_visits
+        expires = offer.publication.endingAt
+        if expires:
+            if expires[-1] == 'Z':
+                expires = expires[:-1]
+                utc = True
+            else:
+                utc = False
+            expires = datetime.datetime.fromisoformat(expires)
+            if utc:
+                expires = expires.replace(tzinfo=datetime.timezone.utc)
+            yo.expires = expires
         yoffers += [yo.copy()]
     yaml.dump(yoffers,
         stream=sys.stdout,

@@ -13,6 +13,11 @@ import datetime
 import json
 import sys
 
+if sys.version_info >= (3, 9):
+    import zoneinfo
+else:
+    zoneinfo = None
+
 import yaml
 
 async def _(): f'{await "# Python >= 3.7 is required #"}'
@@ -22,6 +27,11 @@ class Dict(dict):
     __getattr__ = dict.__getitem__
     __setattr__ = dict.__setitem__
     __delattr__ = dict.__delitem__
+
+if zoneinfo:
+    tz_poland = zoneinfo.ZoneInfo('Europe/Warsaw')
+else:
+    tz_poland = None
 
 def main():
     data = json.load(sys.stdin.buffer, object_hook=Dict)
@@ -55,6 +65,8 @@ def main():
             expires = datetime.datetime.fromisoformat(expires)
             if utc:
                 expires = expires.replace(tzinfo=datetime.timezone.utc)
+            if tz_poland is not None:
+                expires = expires.astimezone(tz_poland)
             yo.expires = expires
         yoffers += [yo.copy()]
     yaml.dump(yoffers,
